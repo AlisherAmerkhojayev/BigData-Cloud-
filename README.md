@@ -33,25 +33,25 @@ The coursework is aligned with the **INM432 Big Data module**, leveraging modern
 
 ## Project Structure
 
-### 📁 Section 0: Setup and Authentication
+### Section 0: Setup and Authentication
 - Environment setup for TensorFlow and Spark.
 - Authentication to Google Cloud Storage and Dataproc.
 - Bucket creation and directory setup.
 
-### 📁 Section 1: Image Preprocessing
-#### ✅ Task 1a: TFRecord Generation in Spark
+### Section 1: Image Preprocessing
+#### Task 1a: TFRecord Generation in Spark
 - Converted `tf.data` pipelines (decode → resize → crop → recompress) into Spark RDD transformations.
 - Used `mapPartitionsWithIndex()` to write `TFRecord` files in parallel.
 
-#### ✅ Task 1b: Verification
+#### Task 1b: Verification
 - Read and visualized images from generated TFRecords.
 - Successfully validated integrity using custom display functions.
 
-#### ✅ Task 1c: Single-Node Cluster Deployment
+#### Task 1c: Single-Node Cluster Deployment
 - Deployed Dataproc cluster with max SSD and vCPU on a single VM.
 - Ran preprocessing job in cloud and verified output.
 
-#### ✅ Task 1d: Cluster Optimisation
+#### Task 1d: Cluster Optimisation
 - Ran jobs on:
   - 1 master + 7 workers (1 vCPU)
   - 4 VMs (2 vCPUs)
@@ -61,22 +61,22 @@ The coursework is aligned with the **INM432 Big Data module**, leveraging modern
 
 ---
 
-### 📁 Section 2: Speed Tests & Benchmarking
-#### ✅ Task 2a: Spark-Parallel Speed Tests
+### Section 2: Speed Tests & Benchmarking
+#### Task 2a: Spark-Parallel Speed Tests
 - Designed `process_dataset(batch_size, num_batches)` logic.
 - Tested combinations in parallel on Spark RDDs.
 - Measured **images/sec** throughput using `TFRecordDataset`.
 
-#### ✅ Task 2b: Output Collection & Analysis
+#### Task 2b: Output Collection & Analysis
 - Collected results into `average_performance_TIMESTAMP.pkl`.
 - Created regression models to understand how `batch_size`, `num_batches`, and their product impact throughput.
 - Produced clean summary tables and visualizations.
 
-#### ✅ Task 2c: Optimisation
+#### Task 2c: Optimisation
 - Used `.cache()` on Spark RDDs to **minimize recomputation** during aggregations.
 - Observed notable reduction in runtime for repeated computations.
 
-#### ✅ Task 2d: Modelling & Interpretation
+#### Task 2d: Modelling & Interpretation
 - Used `LinearRegression` to fit throughput as a function of parameters.
 - Identified that **batch_product** is the strongest predictor of read speed.
 - Interpreted slope coefficients and intercept values.
@@ -84,12 +84,12 @@ The coursework is aligned with the **INM432 Big Data module**, leveraging modern
 
 ---
 
-### 📁 Section 3: Theoretical Discussion
-#### ✅ Task 3a: Cherrypick Contextualisation
+### Section 3: Theoretical Discussion
+#### Task 3a: Cherrypick Contextualisation
 - Evaluated how adaptive cloud configuration prediction aligns with findings.
 - Highlighted variability in performance based on hidden factors (disk speed, scheduling delays).
 
-#### ✅ Task 3b: Strategic Recommendations
+#### Task 3b: Strategic Recommendations
 - For **batch workloads**: Prefer TFRecord format, distribute I/O using more disks over more nodes.
 - For **streaming**: Consider lower batch sizes and finer control of task distribution.
 - Emphasized importance of **profiling and dynamic tuning** in cloud jobs.
@@ -98,11 +98,11 @@ The coursework is aligned with the **INM432 Big Data module**, leveraging modern
 
 ## Key Learnings
 
-- 📌 **Data Format Matters**: Using `TFRecord` files yields dramatic improvements in read speed vs. raw JPEGs.
-- 📌 **Spark + TensorFlow**: Achieving distributed pre-processing requires careful reshaping of TensorFlow operations into stateless Spark RDD transformations.
-- 📌 **Cloud Infrastructure Strategy**: Small clusters with high I/O (standard disk) may underperform compared to larger clusters with better distributed disks and CPUs.
-- 📌 **Profiling is Essential**: Google's monitoring dashboards were crucial for identifying CPU/network bottlenecks.
-- 📌 **Parallel Speed Tests Are Non-Trivial**: Spark-based performance benchmarking helped simulate production-scale load testing.
+-  **Data Format Matters**: Using `TFRecord` files yields dramatic improvements in read speed vs. raw JPEGs.
+-  **Spark + TensorFlow**: Achieving distributed pre-processing requires careful reshaping of TensorFlow operations into stateless Spark RDD transformations.
+-  **Cloud Infrastructure Strategy**: Small clusters with high I/O (standard disk) may underperform compared to larger clusters with better distributed disks and CPUs.
+-  **Profiling is Essential**: Google's monitoring dashboards were crucial for identifying CPU/network bottlenecks.
+-  **Parallel Speed Tests Are Non-Trivial**: Spark-based performance benchmarking helped simulate production-scale load testing.
 
 ---
 
